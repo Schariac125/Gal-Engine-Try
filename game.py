@@ -2,11 +2,11 @@ import sys
 import os
 import json
 import pool
+import character
 class Game:
-    def __init__(self,all_girls,all_npcs):
+    def __init__(self,all_girls):
         self.all_girls=all_girls
-        self.all_npcs=all_npcs
-        self.pool=[pool.all_girls,pool.all_npcs]
+        self.pool=pool.all_girls
         self.begin_love=False
         self.current_girl=None
         self.screen_idx_common=0
@@ -15,7 +15,7 @@ class Game:
     def start_new_game(self):
         print("欢迎来到恋爱养成游戏！")
         #清空所有女角色好感度
-        for girl in self.all_girls:
+        for girl in self.all_girls.values():
             girl.affinity=0
         if self.current_girl!=None:
             self.current_girl=None
@@ -90,7 +90,7 @@ class Game:
             print("删除存档已取消。")
             return
     def check_love(self) -> bool:
-        for girl in self.all_girls:
+        for girl in self.all_girls.values():
             if girl.affinity>=100:
                 self.begin_love=True
                 self.current_girl=girl
@@ -115,18 +115,22 @@ class Game:
                     return
             for _,step_data in steps[self.screen_idx_common:]:
                 print(f"[{step_data['speaker']}]: {step_data['text']}")
-                if step_data.get("choice")=="True":
-                    try:
-                        choice=int(input())
-                        if choice==1:
-                            #这里的好感度变化数值只是示例，后续可以根据需要调整
-                            #目前尚且只能实现固定选项对应固定角色好感度变化，后续可以根据需要实现更复杂的选项和好感度变化逻辑
-                            step_data['girl'].change_affinity(10)
-                        if choice==2:
-                            step_data['girl'].change_affinity(-10)
-                    except ValueError:
-                        print("请输入有效的选项编号。")
+                if step_data.get("choice") == "True":
+                    girl_name = step_data.get("girl")
+                    target_girl = self.all_girls.get(girl_name)
+                    if target_girl is None:
+                        print("当前剧情缺少对应的角色配置。")
                         return
+
+                    while True:
+                        choice = input("请输入选项编号：").strip()
+                        if choice == '1':
+                            target_girl.change_affinity(10)
+                            break
+                        if choice == '2':
+                            target_girl.change_affinity(-10)
+                            break
+                        print("请输入有效的选项编号。")
                 self.screen_idx_common+=1
         except FileNotFoundError:
             print("故事文件不存在。")
@@ -162,5 +166,5 @@ class Game:
 
 if __name__=="__main__":
     #这里需要根据pool.py中的角色池来初始化游戏
-    game=Game(pool.all_girls,pool.all_npcs)
+    game=Game(pool.all_girls)
     game.run()

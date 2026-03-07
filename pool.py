@@ -2,4 +2,3 @@
 import character
 
 all_girls={"Shori": character.Shori()}
-all_npcs=[]
