@@ -119,9 +119,11 @@ class Game:
                     try:
                         choice=int(input())
                         if choice==1:
-                            pass
+                            #这里的好感度变化数值只是示例，后续可以根据需要调整
+                            #目前尚且只能实现固定选项对应固定角色好感度变化，后续可以根据需要实现更复杂的选项和好感度变化逻辑
+                            step_data['girl'].change_affinity(10)
                         if choice==2:
-                            pass
+                            step_data['girl'].change_affinity(-10)
                     except ValueError:
                         print("请输入有效的选项编号。")
                         return

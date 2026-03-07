@@ -20,6 +20,7 @@
     "step4":{
         "choice": "True",
         "speaker":"旁白",
+        "girl":"Shori",
         "text":"请选择一个选项（1/2）"
     }
 }
