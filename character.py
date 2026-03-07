@@ -24,21 +24,18 @@ class MainCharacter(Character):
         else:
             return False
     #这个地方留给子类实现不同角色的个人线剧情
-    def girl_story(self,screen_idx):
+    def girl_story(self,screen_idx,game=None):
         pass
 
     def girl_end(self):
         print(f"{self.name}的个人线已经结束了！")
 
-class npc(Character):
-    def __init__(self,name,role="NPC"):
-        super().__init__(name,role)
 #这只是一个示例角色，后续可以根据需要添加更多角色
 class Shori(MainCharacter):
     def __init__(self,name="Shori"):
         super().__init__(name)
 
-    def girl_story(self,screen_idx):
+    def girl_story(self,screen_idx,game=None):
         idx=screen_idx
         story_filename=os.path.join("story","girls",f"{self.name}.json")
         try:
@@ -52,6 +49,11 @@ class Shori(MainCharacter):
                     for _,story_text in steps[idx:]:
                         print(f"{story_text['speaker']}:{story_text['text']}")
                         screen_idx+=1
+                        if game is not None:
+                            command_result=game.prompt_story_command()
+                            if command_result=="menu":
+                                game.open_story_menu()
+                                return screen_idx
                     return screen_idx
         except FileNotFoundError:
             print("剧情文件不存在。")
