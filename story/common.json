@@ -1,0 +1,25 @@
+{
+    "step1":{
+        "choice":"False",
+        "speaker":"旁白",
+        "text":"这只是一段测试文本"
+    },
+
+    "step2":{
+        "choice":"False",
+        "speaker":"女主",
+        "text":"这是女主的台词"
+    },
+
+    "step3":{
+        "choice": "False",
+        "speaker":"男主",
+        "text":"这是男主的台词"
+    },
+
+    "step4":{
+        "choice": "True",
+        "speaker":"旁白",
+        "text":"请选择一个选项（1/2）"
+    }
+}

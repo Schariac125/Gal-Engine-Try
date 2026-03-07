@@ -1,0 +1,16 @@
+{
+    "step1":{
+        "speaker":"Shori",
+        "text":"这是Shori的个人线剧情第一步"
+    },
+
+    "step2":{
+        "speaker":"Shori",
+        "text":"这是Shori的个人线剧情第二步"
+    },
+
+    "step3":{
+        "speaker":"Shori",
+        "text":"这是Shori的个人线剧情第三步"
+    }
+}
