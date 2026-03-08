@@ -42,18 +42,29 @@ class Shori(MainCharacter):
             with open(story_filename,'r',encoding="utf-8") as f:
                 story_data=json.load(f)
                 steps=sorted(story_data.items(), key=lambda kv:int(kv[0].replace("step","")))
+                history_limit = idx
+                if game is not None:
+                    history_limit = game.get_history_limit()
                 if idx>=len(steps):
                     print("剧情已经结束了")
                     return screen_idx
                 else:
-                    for _,story_text in steps[idx:]:
+                    while screen_idx < len(steps):
+                        _,story_text = steps[screen_idx]
                         print(f"{story_text['speaker']}:{story_text['text']}")
                         screen_idx+=1
                         if game is not None:
+                            game.save_overall()
+                            history_limit = game.get_history_limit()
+                            if game.auto_skip_enabled:
+                                screen_idx = game.execute_skip(steps, screen_idx, history_limit)
+                                continue
                             command_result=game.prompt_story_command()
                             if command_result=="menu":
                                 game.open_story_menu()
                                 return screen_idx
+                            if command_result=="skip":
+                                screen_idx = game.execute_skip(steps, screen_idx, history_limit)
                     return screen_idx
         except FileNotFoundError:
             print("剧情文件不存在。")
