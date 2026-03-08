@@ -23,21 +23,13 @@ class MainCharacter(Character):
             return True
         else:
             return False
-    #这个地方留给子类实现不同角色的个人线剧情
-    def girl_story(self,screen_idx,game=None):
-        pass
 
-    def girl_end(self):
-        print(f"{self.name}的个人线已经结束了！")
-
-#这只是一个示例角色，后续可以根据需要添加更多角色
-class Shori(MainCharacter):
-    def __init__(self,name="Shori"):
-        super().__init__(name)
+    def get_story_filename(self):
+        return os.path.join("story", "girls", f"{self.name}.json")
 
     def girl_story(self,screen_idx,game=None):
         idx=screen_idx
-        story_filename=os.path.join("story","girls",f"{self.name}.json")
+        story_filename=self.get_story_filename()
         try:
             with open(story_filename,'r',encoding="utf-8") as f:
                 story_data=json.load(f)
@@ -69,6 +61,11 @@ class Shori(MainCharacter):
         except FileNotFoundError:
             print("剧情文件不存在。")
             return screen_idx
-    
+
     def girl_end(self):
         print(f"{self.name}的个人线已经结束了！")
+
+#这只是一个示例角色，后续可以根据需要添加更多角色
+class Shori(MainCharacter):
+    def __init__(self,name="Shori"):
+        super().__init__(name)
